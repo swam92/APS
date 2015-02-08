@@ -1,18 +1,38 @@
 import java.io.*;
 import java.util.*;
 
-public class Calendar{
+class Calendar{
 
 	public static void main(String[] args) throws Exception{
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-		String line = null;
+		//BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		Scanner in = new Scanner(System.in);
+		Scanner first = new Scanner(System.in);
 		int count = 0;
-		int[][] inputArray = new int[30][3]; 
 		
-		while((line = in.readLine()) != null){
+		int[][] inputArray = new int[30][3]; 
+
+		while (in.hasNextLine()) {
+			System.out.println("line");
+			String line = in.nextLine();
+            Scanner lineScan = new Scanner(line);
+            int temp=0;
+   		 	while (lineScan.hasNext()){
+   		 		int num = lineScan.nextInt();
+   		 		inputArray[count][temp] = num;
+   		 		//System.out.println(num);
+   		 		temp++;
+            }
+   		 	count++;
+		}
+
+		count = count; 
+		System.out.println(count);
+
+
+		/*while((line = in.readLine()) != null){
 			String[] elems = line.split("\\s");
 				
-			System.out.println(elems[0] + "   " + elems[1]);
+			//System.out.println(elems[0] + "   " + elems[1]);
 
 			if(elems[0].equals("0") && elems[1].equals("0")) {
 				break;
@@ -23,14 +43,7 @@ public class Calendar{
 			}
 			count++;
 
-		}//end while
-
-		for(int j=0;j<30;j++){
-			for(int k=0; k< 3; k++){
-				System.out.print(" " + inputArray[j][k]);
-			}
-			System.out.print("\n");
-		}
+		}//end while*/
 
 		findConflict(inputArray, count);
 
@@ -46,6 +59,10 @@ public class Calendar{
 		int calendarSchedules = 0;
 		int tempTotal = 0;
 		int totalTasks = 0;
+
+		int practiceCount = 0;
+
+
 		while(rowIndex < count){
 			nonRepeatingTasks = arr[rowIndex][0];
 			repeatingTasks = arr[rowIndex][1];
@@ -56,6 +73,7 @@ public class Calendar{
 		calendarSchedules = count - totalTasks;
 		rowIndex=0;
 
+		boolean flag = false;
 		for(int i=0; i < calendarSchedules; i++){
 			String answer = "NO CONFLICT";
 			int[] calendar = new int[1000000];
@@ -63,24 +81,53 @@ public class Calendar{
 			repeatingTasks = arr[i+rowIndex][1];
 			total = nonRepeatingTasks + repeatingTasks;
 			
+			if(total == 0){
+				flag = true;
+				break;
+			}
+
 			for(int j=0; j<total; j++){
+				practiceCount++;
+
+				int start = arr[j+rowIndex+i+1][0];
+				int finish = arr[j+rowIndex+i+1][1];
+
 				if(j<nonRepeatingTasks){
-					int start = arr[j+rowIndex][0];
-					int finish = arr[j+rowIndex][1];
+
+					//System.out.println("start is " + start +" and finish is " + finish);
+
 					for(int k =start; k < finish; k++){
 						if(calendar[k] == 1){
 							answer = "CONFLICT";
 							break;
 						}
+						else{
+							calendar[k] = 1;
+						}
 					}
 				}
+
 				else{
-					int start = arr[j+rowIndex][0];
-					int finish = arr[j+rowIndex][1];
-					int interval = arr[j+rowIndex][2];
+					int interval = arr[j+rowIndex+i+1][2];
+
+					int times = (1000000 / interval);
+					
+					for(int k=0; k < times; k++){
+						for(int h=(k*times); h < 1000000; h++){
+							if(calendar[h] == 1){
+								answer = "CONFLICT";
+								break;
+							}
+							else{
+							calendar[h] = 1;
+							}
+						}
+					}
 				}
 			}
+			if(flag == false){
 			System.out.println(answer);
+		}
 			rowIndex = rowIndex + total;
 		}
 

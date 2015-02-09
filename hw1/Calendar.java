@@ -4,46 +4,23 @@ import java.util.*;
 class Calendar{
 
 	public static void main(String[] args) throws Exception{
-		//BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		Scanner in = new Scanner(System.in);
 		Scanner first = new Scanner(System.in);
 		int count = 0;
 		
-		int[][] inputArray = new int[30][3]; 
+		int[][] inputArray = new int[1000][3]; 
 
 		while (in.hasNextLine()) {
-			System.out.println("line");
 			String line = in.nextLine();
             Scanner lineScan = new Scanner(line);
             int temp=0;
    		 	while (lineScan.hasNext()){
    		 		int num = lineScan.nextInt();
    		 		inputArray[count][temp] = num;
-   		 		//System.out.println(num);
    		 		temp++;
             }
    		 	count++;
 		}
-
-		count = count; 
-		System.out.println(count);
-
-
-		/*while((line = in.readLine()) != null){
-			String[] elems = line.split("\\s");
-				
-			//System.out.println(elems[0] + "   " + elems[1]);
-
-			if(elems[0].equals("0") && elems[1].equals("0")) {
-				break;
-			}
-
-			for(int i=0; i < elems.length; i++){
-				inputArray[count][i] = Integer.parseInt(elems[i]);
-			}
-			count++;
-
-		}//end while*/
 
 		findConflict(inputArray, count);
 
@@ -94,8 +71,6 @@ class Calendar{
 
 				if(j<nonRepeatingTasks){
 
-					//System.out.println("start is " + start +" and finish is " + finish);
-
 					for(int k =start; k < finish; k++){
 						if(calendar[k] == 1){
 							answer = "CONFLICT";
@@ -109,7 +84,6 @@ class Calendar{
 
 				else{
 					int interval = arr[j+rowIndex+i+1][2];
-
 					int times = (1000000 / interval);
 					
 					for(int k=0; k < times; k++){
@@ -125,7 +99,8 @@ class Calendar{
 					}
 				}
 			}
-			if(flag == false){
+		
+		if(flag == false){
 			System.out.println(answer);
 		}
 			rowIndex = rowIndex + total;

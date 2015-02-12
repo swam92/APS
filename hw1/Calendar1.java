@@ -17,13 +17,11 @@ class Calendar1{
 			int nonRepeating = in.nextInt();
 			int repeating = in.nextInt();
         	int[] calendar = new int[1000001];
-        	
         	if(nonRepeating==0 && repeating==0){
-        		break;
+        		return;
         	}
 
            	for(int i=0; i<nonRepeating;i++){
-
             	int start=in.nextInt();
             	int finish = in.nextInt();
                 int dur= finish-start;
@@ -35,21 +33,17 @@ class Calendar1{
             			overlapFlag = true;
             			break;
             		}
-                    else if(calendar[k]==1 && dur==1 && calendar[start-1]==1 && calendar[finish+1]==1){
+                    else if(calendar[k]==1 && dur==1 && k==start && calendar[start+1]==1){
                         overlapFlag=true;
                         break;
                     }
                     else{
-                      //System.out.println(k + " first");
             		  calendar[k] = 1;
                     }
             	}
-            	if(overlapFlag==true){
-            		break;
-            	}
             }
-            if(overlapFlag==false){
             	for(int j=0; j<repeating;j++){
+                    //if(overlapFlag==false){
             		int start=in.nextInt();
             		int finish = in.nextInt();
                     if(start==0 && finish==0){
@@ -67,19 +61,21 @@ class Calendar1{
                                     overlapFlag=true;
                                     break;
                                 }
-                                else if(calendar[k]==1 && duration==1 && calendar[start-1]==1 && calendar[finish+1]==1){
+
+                                else if(calendar[k]==1 && duration==1 && k==start &&calendar[start+1]==1){
                                     overlapFlag=true;
                                     break;
                                 }
-                                //System.out.println(k + " second");
                                  calendar[k]=1;
                             }
+
                             else{
                                 start = 1000002;
                                 break;
                             }
 
             		    }//end for loop
+                        
                         start+=interval;
                         finish+=interval;
 
@@ -92,8 +88,13 @@ class Calendar1{
                     break;
                 }
 
-                }//end repeating loop
-        	}
+                //}//if
+                //else{
+                //    in.nextInt();
+                //    in.nextInt();
+                //    in.nextInt();
+                //}
+        	}//end repeating loop
 
         	if(overlapFlag==false){
         		System.out.println("NO CONFLICT");

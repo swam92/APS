@@ -36,6 +36,12 @@ class B{
 				System.out.println(0);
 				continue;
 			}
+			if(accumulator>n){
+				System.out.println(0);
+				continue;
+			}
+
+			try{
 			int top = ((n-accumulator) + 1);
 			int bottom = ((n-accumulator) - k + 1);
 
@@ -44,6 +50,10 @@ class B{
 			BigInteger three = factorial[top-bottom];
 
 			System.out.println(one.divide(two.multiply(three)));
+			}
+			catch(Exception e){
+				System.out.println(0);
+			}
 
 		}
 

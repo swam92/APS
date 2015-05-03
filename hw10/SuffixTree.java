@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class SuffixTree
+public class Main
 {
 	private static final int INF = Integer.MAX_VALUE-1;
 	private int last;
@@ -35,9 +35,12 @@ public class SuffixTree
 		/** Suffix link used in linear tree building algorithm */
 		private Node suffix;
 		/** An inclusive range [a,b] of indices into str representing a prefix leading to this node */
-		public int a, b;
+		public int a, b, path_label_length;
 		public boolean discovered = false;
 		public void set(){this.discovered = true;}
+		public void set_path_label_length(int n){this.path_label_length = n;}
+		public int get_path_label_length(){return this.path_label_length;}
+
 		/** Adds an edge to the map */
 		public void add(Edge e) { edges.put(e.getFirst(),e); }
 		/** Gets the edge using the given first character */
@@ -48,7 +51,7 @@ public class SuffixTree
 		public Iterator<Edge> iterator() { return edges.values().iterator(); }
 		public String toString() { return str.substring(a,Math.min(b,last)+1); }
 	}
-	public SuffixTree(String str)
+	public  Main(String str)
 	{
 		this.str = str;
 		buildTree();
@@ -146,23 +149,28 @@ public class SuffixTree
 		Stack<Node> stack = new Stack<Node>();
 		String resultString = "";
 		int result = 0;
+		tree.set_path_label_length(0);
 		stack.push(tree);
+
 		while(!stack.empty()){
 			Node v = stack.pop();
-			System.out.println(v.toString());
 			if(v.discovered == false){
 				v.set();
-				Set<Character> keys = v.edges.keySet();
-				for(Character c: keys){
-					Edge e = v.edges.get(c);
-					Node toPush = e.end;
-					stack.push(toPush);
 
-					if( (toPush.toString().length() >= resultString.length()) && (toPush.numChildren() != 0) ){
-						resultString = toPush.toString();
-						result = toPush.toString().length();
+			for(Edge e: v.edges.values()){
+				Node toPush = e.end;
+				int previous = v.get_path_label_length();
+				toPush.set_path_label_length(previous + e.length());
+				int path_length = toPush.get_path_label_length();
+
+				if(toPush.numChildren() > 0){
+					stack.push(toPush);
+					if( (path_length >= result) ){
+						result = path_length;
 					}
 				}
+			}
+			
 			}
 		}
 
@@ -175,10 +183,9 @@ public class SuffixTree
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		int cases = Integer.parseInt(in.readLine());
 		for(int i=0; i < cases; i++){
-			SuffixTree tree = new SuffixTree(in.readLine());
+			Main tree = new Main(in.readLine() + '$');
 			int answer = DFS(tree.getRoot());
 			System.out.println(answer);
-			System.out.println("------------------------");
 		}
 
 	}
